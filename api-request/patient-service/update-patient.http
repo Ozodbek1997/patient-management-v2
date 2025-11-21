@@ -1,0 +1,9 @@
+PUT http://localhost:4000/api/v1/patients/5f385489-7ba9-4508-a4dd-6cfe72586ae8
+Content-Type: application/json
+
+{
+  "name": "Bekzod",
+  "email": "bekzodd@gmail.com",
+  "address": "Bukhara",
+  "dateOfBirth": "1997-09-09"
+}

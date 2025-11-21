@@ -1,0 +1,3 @@
+DELETE http://localhost:4000/api/v1/patients/b2138844-c701-4b7c-b0f7-6852fb3debc4
+Content-Type: application/json
+

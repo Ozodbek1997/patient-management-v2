@@ -1,0 +1,11 @@
+POST http://localhost:4000/api/v1/patients
+Content-Type: application/json
+
+
+{
+  "name": "Jone Doe with billing account",
+  "email": "islom@gmail.com",
+  "address": "Bukhara",
+  "dateOfBirth": "1997-09-09",
+  "registeredDate": "2025-11-28"
+}
