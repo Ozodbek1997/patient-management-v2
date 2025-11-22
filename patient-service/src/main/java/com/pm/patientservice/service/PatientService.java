@@ -12,6 +12,7 @@ import com.pm.patientservice.dto.PatientResponseDTO;
 import com.pm.patientservice.exception.EmailAreadyExistsException;
 import com.pm.patientservice.exception.PatientNotFoundException;
 import com.pm.patientservice.grpc.BillingServiceGrpcClient;
+import com.pm.patientservice.kafka.KafkaProducer;
 import com.pm.patientservice.mapper.PatientMapper;
 import com.pm.patientservice.model.Patient;
 import com.pm.patientservice.repos.PatientRepository;
@@ -30,7 +31,7 @@ public class PatientService {
 
     private final PatientRepository patientRepository;
     private final BillingServiceGrpcClient billingServiceGrpcClient;
-
+    private final KafkaProducer kafkaProducer;
 
     public List<PatientResponseDTO> getPatients() {
         List<Patient> patients = patientRepository.findAll();
@@ -48,7 +49,10 @@ public class PatientService {
         Patient newPatient = patientRepository.save(entity);
 
 
-        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(),newPatient.getName(),newPatient.getEmail());
+        billingServiceGrpcClient.createBillingAccount(newPatient.getId().toString(), newPatient.getName(), newPatient.getEmail());
+
+        kafkaProducer.sendEvent(newPatient);
+
         return PatientMapper.toDTO(newPatient);
     }
 
@@ -56,7 +60,7 @@ public class PatientService {
         Patient patient = patientRepository
                 .findById(uuid).orElseThrow(() -> new PatientNotFoundException("Patient not found with ID: " + uuid));
 
-        if (patientRepository.existsByEmailAndIdNot(dto.getEmail(),uuid)) {
+        if (patientRepository.existsByEmailAndIdNot(dto.getEmail(), uuid)) {
             throw new EmailAreadyExistsException(" A patient with this email already exist: " + dto.getEmail());
         }
         patient.setName(dto.getName());
@@ -69,7 +73,7 @@ public class PatientService {
         return PatientMapper.toDTO(updatedPatient);
     }
 
-    public void deletePatientId(UUID id){
+    public void deletePatientId(UUID id) {
         patientRepository.deleteById(id);
     }
 
