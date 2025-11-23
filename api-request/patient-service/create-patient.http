@@ -3,8 +3,8 @@ Content-Type: application/json
 
 
 {
-  "name": "Jone Doe with billing account",
-  "email": "12311@gmadil.com",
+  "name": "Jone Doe kafka related test",
+  "email": "aa@gmadil.com",
   "address": "Bukhara",
   "dateOfBirth": "1997-09-09",
   "registeredDate": "2025-11-28"
